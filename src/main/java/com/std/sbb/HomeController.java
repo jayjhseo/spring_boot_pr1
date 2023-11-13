@@ -3,6 +3,7 @@ package com.std.sbb;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +21,10 @@ import static javax.swing.UIManager.put;
 @Controller
 public class HomeController {
     private int i;
+    List<Person> people;
     public HomeController() {
         i = -1;
+        people = new ArrayList<>();
     }
     @GetMapping("/home/main")
     @ResponseBody
@@ -90,22 +93,44 @@ public class HomeController {
         list.add(30);
         return list;
     }
-    List<Person> people = new ArrayList<>();
-    int id = 0;
-    @GetMapping("home/addPerson")
+
+    @GetMapping("/home/addPerson")
     @ResponseBody
-    public Map<String, Object> addPerson(@RequestParam(defaultValue = "null") String name, @RequestParam(defaultValue = "0") int age) {
-        Map<String, Object> persons = new HashMap<>();
-        put("id", id++);
-        put("name", name);
-        put("age", age);
-        put("people", new ArrayList<>());
+    public String addPerson(String name, int age) {
+        Person p = new Person(name, age);
+        people.add(p);
+        System.out.println(p.toString());
+
+        return "%d번 사람이 추가되었습니다.".formatted(p.getId());
+    }
+    @GetMapping("/home/people")
+    @ResponseBody
+    public List<Person> addPerson() {
+        return people;
+    }
 
 
+}
+@Getter
+@AllArgsConstructor
+@ToString
+class Person {
+    private static int lastId;
+    private int id;
+    private String name;
+    private int age;
 
+    static {
+        lastId = 0;
+    }
 
+    public Person(String name, int age) {
+//        this.name = name;
+//        this.age = age;
+        this(++lastId, name, age);
     }
 }
+
 
 class Car {
     private int id;
@@ -146,12 +171,3 @@ class CarV2 {
     private List<Integer> relatedIds;
 }
 
-@Getter
-@AllArgsConstructor
-class Person {
-    private int id;
-    private String name;
-    private int age;
-    private List<Person> people;
-
-}
