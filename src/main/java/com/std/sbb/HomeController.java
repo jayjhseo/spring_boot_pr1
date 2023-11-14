@@ -21,10 +21,9 @@ import static javax.swing.UIManager.put;
 @Controller
 public class HomeController {
     private int i;
-    List<Person> people;
+
     public HomeController() {
         i = -1;
-        people = new ArrayList<>();
     }
     @GetMapping("/home/main")
     @ResponseBody
@@ -94,42 +93,8 @@ public class HomeController {
         return list;
     }
 
-    @GetMapping("/home/addPerson")
-    @ResponseBody
-    public String addPerson(String name, int age) {
-        Person p = new Person(name, age);
-        people.add(p);
-        System.out.println(p.toString());
-
-        return "%d번 사람이 추가되었습니다.".formatted(p.getId());
-    }
-    @GetMapping("/home/people")
-    @ResponseBody
-    public List<Person> addPerson() {
-        return people;
-    }
-
-
 }
-@Getter
-@AllArgsConstructor
-@ToString
-class Person {
-    private static int lastId;
-    private int id;
-    private String name;
-    private int age;
 
-    static {
-        lastId = 0;
-    }
-
-    public Person(String name, int age) {
-//        this.name = name;
-//        this.age = age;
-        this(++lastId, name, age);
-    }
-}
 
 
 class Car {
