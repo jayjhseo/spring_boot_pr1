@@ -60,16 +60,20 @@ public class PersonController {
     @GetMapping("/home/modifyPerson")
     @ResponseBody
     public String modifyPerson(int id, String name, int age) {
-
+         Person found = people.stream().filter(person -> person.getId() == id).findFirst().orElse(null);
+         if (found == null) {
+             return "%d번 사람이 존재하지 않습니다.".formatted(id);
+         }
+         return "%d번 사람이 수정되었습니다.".formatted(id);
 //        *for문 이용한 수정 리팩토링후*
-        Person person = getPeopleList(id);
-        if (person == null) {
-            return "%d번 사람이 존재하지 않습니다.".formatted(id);
-        }
-        person.setId(id);
-        person.setName(name);
-        person.setAge(age);
-        return "%d번 사람이 수정되었습니다.".formatted(person.getId());
+//        Person person = getPeopleList(id);
+//        if (person == null) {
+//            return "%d번 사람이 존재하지 않습니다.".formatted(id);
+//        }
+//        person.setId(id);
+//        person.setName(name);
+//        person.setAge(age);
+//        return "%d번 사람이 수정되었습니다.".formatted(person.getId());
 
 //        *for문 이용한 수정 리팩토링 전*
 //        for (int i = 0; i < people.size(); i++) {
